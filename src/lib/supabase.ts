@@ -61,6 +61,13 @@ export interface Post {
   tags?: Tag[];
 }
 
+// Type for posts with all relations populated
+export interface PostWithRelations extends Post {
+  category: Category | null;
+  author: Profile | null;
+  tags: Tag[];
+}
+
 export interface PostTag {
   post_id: string;
   tag_id: string;
