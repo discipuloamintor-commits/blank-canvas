@@ -194,7 +194,6 @@ export default function Article() {
                 isLoading={relatedLoading}
               />
             )}
-            )}
           </div>
 
           {/* Sidebar */}
