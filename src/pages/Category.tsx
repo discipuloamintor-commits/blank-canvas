@@ -90,7 +90,7 @@ export default function Category() {
               <>
                 <div className="grid gap-6 md:grid-cols-2">
                   {posts.map((post) => (
-                    <ArticleCard key={post.id} post={post} />
+                    <ArticleCard key={post.id} post={post as any} />
                   ))}
                 </div>
 
