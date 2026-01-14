@@ -112,6 +112,38 @@ export function useAds() {
     }
   };
 
+  const trackImpression = async (id: string) => {
+    try {
+      const { data } = await supabase
+        .from('advertisements')
+        .select('impressions_count')
+        .eq('id', id)
+        .single();
+      
+      if (data) {
+        await supabase
+          .from('advertisements')
+          .update({ impressions_count: (data.impressions_count || 0) + 1 })
+          .eq('id', id);
+      }
+    } catch (error) {
+      console.error('Error tracking ad impression:', error);
+    }
+  };
+
+  const getAdByPosition = (position: string): Advertisement | undefined => {
+    const now = new Date();
+    const activeAds = (adsQuery.data || []).filter(ad => {
+      if (!ad.is_active) return false;
+      if (ad.position !== position) return false;
+      if (ad.start_date && new Date(ad.start_date) > now) return false;
+      if (ad.end_date && new Date(ad.end_date) < now) return false;
+      return true;
+    });
+    // Return highest priority ad
+    return activeAds.sort((a, b) => (b.priority || 0) - (a.priority || 0))[0];
+  };
+
   return {
     ads: adsQuery.data || [],
     isLoading: adsQuery.isLoading,
@@ -120,6 +152,8 @@ export function useAds() {
     updateAd: updateAdMutation.mutateAsync,
     deleteAd: deleteAdMutation.mutateAsync,
     trackClick,
+    trackImpression,
+    getAdByPosition,
     isCreating: createAdMutation.isPending,
     isUpdating: updateAdMutation.isPending,
     isDeleting: deleteAdMutation.isPending,
