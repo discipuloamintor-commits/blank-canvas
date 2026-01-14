@@ -24,8 +24,13 @@ const iconMap: Record<string, React.ElementType> = {
   layers: Layers,
 };
 
-export function CategoryGrid() {
-  const { categories, isLoading } = useCategories();
+interface CategoryGridProps {
+  categories?: Array<{ id: string; name: string; slug: string; description?: string | null; icon?: string | null; color?: string | null }>;
+}
+
+export function CategoryGrid({ categories: propCategories }: CategoryGridProps) {
+  const { categories: hookCategories, isLoading } = useCategories();
+  const categories = propCategories || hookCategories;
 
   if (isLoading) {
     return (

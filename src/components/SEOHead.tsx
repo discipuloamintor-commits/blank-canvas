@@ -6,6 +6,9 @@ interface SEOHeadProps {
   keywords?: string;
   image?: string;
   url?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
   type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
@@ -19,6 +22,9 @@ export function SEOHead({
   keywords = "inteligência artificial, IA, machine learning, tutoriais, tecnologia",
   image = "/og-image.jpg",
   url,
+  canonical,
+  ogImage,
+  ogType,
   type = "website",
   publishedTime,
   modifiedTime,
@@ -27,7 +33,9 @@ export function SEOHead({
 }: SEOHeadProps) {
   const siteTitle = "Imersão Completa";
   const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
-  const canonicalUrl = url || window.location.href;
+  const canonicalUrl = canonical || url || window.location.href;
+  const finalImage = ogImage || image;
+  const finalType = ogType || type;
 
   return (
     <Helmet>
@@ -40,9 +48,9 @@ export function SEOHead({
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={finalImage} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:type" content={type} />
+      <meta property="og:type" content={finalType} />
       <meta property="og:site_name" content={siteTitle} />
 
       {/* Article specific */}
